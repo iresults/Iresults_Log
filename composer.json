@@ -1,0 +1,18 @@
+{
+    "name": "iresults/log",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andreas Thurnheer-Meier",
+            "email": "tma@iresults.li"
+        },
+        {
+            "name": "Daniel Corn",
+            "email": "cod@iresults.li"
+        }
+    ],
+    "require": {
+        "psr/log": "^1.0.2"
+    }
+}

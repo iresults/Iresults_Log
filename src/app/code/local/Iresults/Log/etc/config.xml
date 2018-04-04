@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<config>
+    <modules>
+        <Iresults_Log>
+            <version>0.1.0</version>
+        </Iresults_Log>
+    </modules>
+    <global>
+        <helpers>
+            <iresults_log>
+                <class>Iresults_Log_Helper</class>
+            </iresults_log>
+        </helpers>
+        <models>
+            <iresults_log>
+                <class>Iresults_Log_Model</class>
+            </iresults_log>
+        </models>
+    </global>
+</config>

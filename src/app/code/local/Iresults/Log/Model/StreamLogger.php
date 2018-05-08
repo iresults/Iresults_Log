@@ -1,18 +1,22 @@
 <?php
 
+use Psr\Log\LogLevel;
+
 /**
  * A Logger implementation that logs messages to a given stream
  */
-class Iresults_Log_Model_StreamLogger extends \Psr\Log\AbstractLogger
+class Iresults_Log_Model_StreamLogger extends Iresults_Log_Model_AbstractLogger
 {
     private $stream;
     private $isStreamOwner = false;
 
     /**
      * @param resource|string $stream
+     * @param string          $minimumLogLevel
      */
-    public function __construct($stream = null)
+    public function __construct($stream = null, $minimumLogLevel = LogLevel::ALERT)
     {
+        parent::__construct($minimumLogLevel);
         if (null === $stream) {
             $this->stream = STDOUT;
         }
@@ -27,6 +31,9 @@ class Iresults_Log_Model_StreamLogger extends \Psr\Log\AbstractLogger
 
     public function log($level, $message, array $context = [])
     {
+        if (!$this->matchesMinimumLogLevel($level)) {
+            return;
+        }
         fwrite($this->stream, sprintf('[%s] %s', strtoupper($level), $message) . PHP_EOL);
     }
 

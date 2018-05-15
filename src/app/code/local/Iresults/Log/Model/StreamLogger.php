@@ -34,7 +34,13 @@ class Iresults_Log_Model_StreamLogger extends Iresults_Log_Model_AbstractLogger
         if (!$this->matchesMinimumLogLevel($level)) {
             return;
         }
-        fwrite($this->stream, sprintf('[%s] %s', strtoupper($level), $message) . PHP_EOL);
+
+        if ($context) {
+            $contextString = ': ' . json_encode($context);
+        } else {
+            $contextString = '';
+        }
+        fwrite($this->stream, sprintf('[%s] %s%s', strtoupper($level), $message, $contextString) . PHP_EOL);
     }
 
     public function __destruct()

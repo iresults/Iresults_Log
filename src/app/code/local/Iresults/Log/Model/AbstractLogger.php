@@ -1,5 +1,6 @@
 <?php
 
+use Iresults_Log_Model_FormatterInterface as FormatterInterface;
 use Psr\Log\LogLevel;
 
 /**
@@ -9,14 +10,24 @@ abstract class Iresults_Log_Model_AbstractLogger extends \Psr\Log\AbstractLogger
 {
     use Iresults_Log_Model_LogLevelTrait;
 
+    /**
+     * @var string
+     */
     private $minimumLogLevel = LogLevel::ALERT;
 
     /**
-     * @param string $minimumLogLevel
+     * @var Iresults_Log_Model_Formatter
      */
-    public function __construct($minimumLogLevel = LogLevel::ALERT)
+    protected $formatter;
+
+    /**
+     * @param string                  $minimumLogLevel
+     * @param FormatterInterface|null $formatter
+     */
+    public function __construct($minimumLogLevel = LogLevel::ALERT, FormatterInterface $formatter = null)
     {
         $this->minimumLogLevel = $minimumLogLevel;
+        $this->formatter = $formatter ?: new Iresults_Log_Model_Formatter();
     }
 
     public function getMinimumLogLevel()

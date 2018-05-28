@@ -1,5 +1,6 @@
 <?php
 
+use Iresults_Log_Model_FormatterInterface as FormatterInterface;
 use Psr\Log\LogLevel;
 
 /**
@@ -11,12 +12,16 @@ class Iresults_Log_Model_StreamLogger extends Iresults_Log_Model_AbstractLogger
     private $isStreamOwner = false;
 
     /**
-     * @param resource|string $stream
-     * @param string          $minimumLogLevel
+     * @param resource|string         $stream
+     * @param string                  $minimumLogLevel
+     * @param FormatterInterface|null $formatter
      */
-    public function __construct($stream = null, $minimumLogLevel = LogLevel::ALERT)
-    {
-        parent::__construct($minimumLogLevel);
+    public function __construct(
+        $stream = null,
+        $minimumLogLevel = LogLevel::ALERT,
+        FormatterInterface $formatter = null
+    ) {
+        parent::__construct($minimumLogLevel, $formatter);
         if (null === $stream) {
             $this->stream = STDOUT;
         }
@@ -35,12 +40,10 @@ class Iresults_Log_Model_StreamLogger extends Iresults_Log_Model_AbstractLogger
             return;
         }
 
-        if ($context) {
-            $contextString = ': ' . json_encode($context);
-        } else {
-            $contextString = '';
-        }
-        fwrite($this->stream, sprintf('[%s] %s%s', strtoupper($level), $message, $contextString) . PHP_EOL);
+        fwrite(
+            $this->stream,
+            sprintf('[%s] %s', strtoupper($level), $this->formatter->format($message, $context)) . PHP_EOL
+        );
     }
 
     public function __destruct()

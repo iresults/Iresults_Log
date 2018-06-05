@@ -23,12 +23,19 @@ class Iresults_Log_Model_StreamLogger extends Iresults_Log_Model_AbstractLogger
     ) {
         parent::__construct($minimumLogLevel, $formatter);
         if (null === $stream) {
+            if (!defined('STDOUT')) {
+                define('STDOUT', fopen('php://stdout', 'w'));
+            }
             $this->stream = STDOUT;
         }
         if (is_string($stream)) {
             $this->isStreamOwner = true;
             $this->stream = fopen($stream, 'a');
         }
+        if (is_resource($stream)) {
+            $this->stream = $stream;
+        }
+
         if (!is_resource($this->stream)) {
             throw new InvalidArgumentException('Argument "stream" must either be a resource or valid file path');
         }
